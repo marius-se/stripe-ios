@@ -232,9 +232,9 @@ extension PaymentSheet {
         // This is a bit of a hack: We traverse the view hierarchy looking for the most reasonable VC to present from.
         // A VC hosted within a SwiftUI cell, for example, doesn't have a parent, so we need to find the UIWindow.
         var presentingViewController = uiViewController.view.window?.rootViewController
-        presentingViewController =
-          presentingViewController?.presentedViewController ?? presentingViewController
-          ?? uiViewController
+        while presentingViewController?.presentedViewController != nil {
+            presentingViewController = presentingViewController?.presentedViewController
+        }
         if let presentingViewController = presentingViewController {
           paymentSheet.present(from: presentingViewController) { (result) in
             self.parent.presented = false
